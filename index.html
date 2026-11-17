@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ammora Swap — Exchange on GIWA Sepolia</title>
+  <script type="module" crossorigin src="./assets/index-B63KecbJ.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DnY2Up_Q.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo-wrap"><img src="./ammora-logo.webp" alt="Ammora" /></div>
+        <div>
+          <h1>Swap</h1>
+          <p class="sub">Exchange powered by the Ammora SDK · GIWA Sepolia testnet</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <span id="chainBadge" class="badge">Chain 91342 · connecting…</span>
+        <button id="connectBtn" class="btn primary">Connect Wallet</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="card swap-card">
+        <div class="row-head">
+          <h2>Swap</h2>
+          <label class="slippage">Slippage
+            <select id="slippage">
+              <option value="50">0.5%</option>
+              <option value="100" selected>1.0%</option>
+              <option value="300">3.0%</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="token-box">
+          <div class="token-top"><span>You pay</span><span id="balanceIn" class="muted"></span></div>
+          <div class="token-input">
+            <input id="amountIn" type="text" inputmode="decimal" placeholder="0.0" autocomplete="off" />
+            <button id="tokenInBtn" class="token-select">Select token</button>
+          </div>
+          <div class="token-usd muted" id="fiatIn"></div>
+        </div>
+
+        <button id="flipBtn" class="flip" title="Flip direction">↓↑</button>
+
+        <div class="token-box">
+          <div class="token-top"><span>You receive (estimated)</span><span id="balanceOut" class="muted"></span></div>
+          <div class="token-input">
+            <input id="amountOut" type="text" placeholder="0.0" readonly />
+            <button id="tokenOutBtn" class="token-select">Select token</button>
+          </div>
+          <div class="token-usd muted" id="fiatOut"></div>
+        </div>
+
+        <div id="quoteBox" class="quote hidden">
+          <div><span>Expected output</span><b id="qExpected">–</b></div>
+          <div><span>Minimum received</span><b id="qMinimum">–</b></div>
+          <div><span>Price impact</span><b id="qImpact">–</b></div>
+          <div><span>Route</span><b id="qRoute">–</b></div>
+          <div><span>Pool</span><b id="qPool">–</b></div>
+        </div>
+
+        <button id="swapBtn" class="btn primary big" disabled>Select tokens to swap</button>
+        <p id="status" class="status muted"></p>
+        <p id="txLine" class="txline hidden">Tx: <a id="txLink" href="#" target="_blank" rel="noopener"></a></p>
+      </section>
+
+      <section class="card">
+        <h2>Live launch curves</h2>
+        <p class="muted">Discovered on-chain from the Ammora V4 factory (auto-route generation). Click a row to trade that token against ETH.</p>
+        <div id="poolList" class="pools"><p class="muted">Scanning GIWA Sepolia for live pools…</p></div>
+      </section>
+
+      <section class="card">
+        <h2>How it works</h2>
+        <ol class="how">
+          <li>Connect a wallet on GIWA Sepolia (chain ID 91342). No funds leave your wallet until you confirm in your wallet.</li>
+          <li>Pick a pair. Quotes come from the real Ammora SDK route client (<code>@ammora-protocol/sdk@0.3.9</code>) reading live on-chain state.</li>
+          <li>Press Swap: the app prepares the exact-input swap, shows the approval + transaction, simulates it, then sends it only after your wallet confirmation.</li>
+          <li>Paying with ETH? One click is enough: the app wraps the exact amount you need into WETH automatically as part of the swap — no separate step, no extra waiting.</li>
+          <li>Need WETH without swapping? Wrap testnet ETH with the button below (calls WETH <code>deposit()</code>).</li>
+        </ol>
+        <button id="wrapBtn" class="btn">Wrap 0.01 ETH → WETH</button>
+        <p class="muted small">Testnet only. Built for the Ammora Season 2 Builder mission. Nothing here is financial advice.</p>
+      </section>
+    </main>
+  </div>
+
+  <div id="tokenModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><h3 id="modalTitle">Select token</h3><button id="modalClose" class="btn ghost">✕</button></div>
+      <input id="tokenSearch" type="text" placeholder="Search name, symbol or address…" />
+      <div id="tokenList" class="token-list"></div>
+    </div>
+  </div>
+
+</body>
+</html>
